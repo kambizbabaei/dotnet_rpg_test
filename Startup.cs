@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using pr.services.CharachterService;
+using pr.services.CharacterService;
 
 namespace pr
 {
@@ -32,6 +34,8 @@ namespace pr
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "pr", Version = "v1" });
             });
+            services.AddSingleton<ICharacterService, CharacterService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
