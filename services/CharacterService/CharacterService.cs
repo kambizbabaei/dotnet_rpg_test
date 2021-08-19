@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using pr.models;
 using pr.services.CharacterService;
 
@@ -26,25 +27,25 @@ namespace pr.services.CharachterService
         };
 
 
-        public Character addCharacter(Character character)
+        public async Task<Character> addCharacter(Character character)
         {
             character.id = characters.Count;
             characters.Add(character);
             return character;
         }
 
-        public Character Get(int? id)
+        public async Task<Character> Get(int? id)
         {
             Character? character = characters.FirstOrDefault(c => c.id == id);
             return character;
         }
 
-        public List<Character> getAllCharacters()
+        public async Task<List<Character>> getAllCharacters()
         {
             return characters;
         }
 
-        public Character getFirst()
+        public async Task<Character> getFirst()
         {
             return characters[0];
         }

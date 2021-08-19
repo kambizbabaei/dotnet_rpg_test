@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using pr.models;
 using pr.services.CharacterService;
@@ -20,40 +21,40 @@ namespace pr.Controllers
         }
 
         [HttpGet("GetFirst")]
-        public IActionResult GetFirst()
+        public async Task<IActionResult> GetFirst()
         {
-            return Ok(this.CharacterService.getFirst());
+            return Ok(await this.CharacterService.getFirst());
         }
 
         [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(this.CharacterService.getAllCharacters());
+            return Ok(await this.CharacterService.getAllCharacters());
         }
 
 
 
         //has problem
         [HttpGet("{id?}")]
-        public IActionResult Get(int? id)
+        public async Task<IActionResult> Get(int? id)
         {
 
             if (!id.HasValue)
             {
                 return BadRequest();
             }
-            else if (this.CharacterService.getAllCharacters().Count - 1 < id)
+            else if ((await this.CharacterService.getAllCharacters()).Count - 1 < id)
             {
                 return NotFound();
             }
-            return Ok(this.CharacterService.Get(id));
+            return Ok(await this.CharacterService.Get(id));
 
         }
         // has problem
         [HttpPost]
-        public IActionResult addCharacter(Character character)
+        public async Task<IActionResult> addCharacter(Character character)
         {
-            return Ok(this.CharacterService.addCharacter(character));
+            return Ok(await this.CharacterService.addCharacter(character));
         }
     }
 }
