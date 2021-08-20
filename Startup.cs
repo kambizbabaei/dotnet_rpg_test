@@ -35,6 +35,7 @@ namespace pr
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "pr", Version = "v1" });
             });
             services.AddSingleton<ICharacterService, CharacterService>();
+            services.AddAutoMapper(typeof(Startup));
 
         }
 
@@ -48,7 +49,7 @@ namespace pr
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "pr v1"));
             }
 
-            app.UseHttpsRedirection();
+
 
             app.UseRouting();
 

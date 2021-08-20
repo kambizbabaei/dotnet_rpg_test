@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using pr.dto.Character;
 using pr.models;
 using pr.Models;
@@ -10,6 +11,12 @@ namespace pr.services.CharachterService
 {
     public class CharacterService : ICharacterService
     {
+        private readonly IMapper mapper;
+        public CharacterService(IMapper mapper)
+        {
+            this.mapper = mapper;
+
+        }
 
         private static List<Character> characters = new List<Character>
         {
@@ -29,12 +36,13 @@ namespace pr.services.CharachterService
         };
 
 
-        public async Task<ServiceResponse<GetCharacterDto>> addCharacter(AddCharacterDto character)
+        public async Task<ServiceResponse<GetCharacterDto>> addCharacter(AddCharacterDto inCharacter)
         {
+            Character character = mapper.Map<Character>(inCharacter);
             character.id = characters.Count;
             characters.Add(character);
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
-            response.Data = character;
+            response.Data = mapper.Map<GetCharacterDto>(character);
             response.isSuccessful = true;
             response.Message = "request accomplished;";
             return response;
@@ -42,7 +50,7 @@ namespace pr.services.CharachterService
 
         public async Task<ServiceResponse<GetCharacterDto>> Get(int? id)
         {
-            Character? character = characters.FirstOrDefault(c => c.id == id);
+            Character character = characters.FirstOrDefault(c => c.id == id);
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
             if (character.Equals(null))
             {
@@ -51,7 +59,7 @@ namespace pr.services.CharachterService
                 response.Message = "request failed;";
                 return response;
             }
-            response.Data = character;
+            response.Data = mapper.Map<GetCharacterDto>(character);
             response.isSuccessful = true;
             response.Message = "request accomplished;";
             return response;
@@ -60,7 +68,7 @@ namespace pr.services.CharachterService
         public async Task<ServiceResponse<List<GetCharacterDto>>> getAllCharacters()
         {
             ServiceResponse<List<GetCharacterDto>> response = new ServiceResponse<List<GetCharacterDto>>();
-            response.Data = characters;
+            response.Data = (characters.Select(c => mapper.Map<GetCharacterDto>(c))).ToList();
             response.isSuccessful = true;
             response.Message = "request accomplished;";
             return response;
@@ -69,15 +77,12 @@ namespace pr.services.CharachterService
         public async Task<ServiceResponse<GetCharacterDto>> getFirst()
         {
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
-            response.Data = characters[0];
+            response.Data = mapper.Map<GetCharacterDto>(characters[0]);
             response.isSuccessful = true;
             response.Message = "request accomplished;";
             return response;
         }
 
-        Task<ServiceResponse<AddCharacterDto>> ICharacterService.addCharacter(AddCharacterDto character)
-        {
-            throw new System.NotImplementedException();
-        }
+
     }
 }

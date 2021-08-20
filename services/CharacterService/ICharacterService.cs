@@ -10,7 +10,7 @@ namespace pr.services.CharacterService
     {
 
         Task<ServiceResponse<List<GetCharacterDto>>> getAllCharacters();
-        Task<ServiceResponse<AddCharacterDto>> addCharacter(AddCharacterDto character);
+        Task<ServiceResponse<GetCharacterDto>> addCharacter(AddCharacterDto character);
         Task<ServiceResponse<GetCharacterDto>> getFirst();
         Task<ServiceResponse<GetCharacterDto>> Get(int? id);
 

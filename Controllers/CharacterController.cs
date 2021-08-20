@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using pr.dto.Character;
 using pr.models;
 using pr.services.CharacterService;
 
@@ -48,7 +49,7 @@ namespace pr.Controllers
             return Ok(await this.CharacterService.Get(id));
         }
         [HttpPost]
-        public async Task<IActionResult> addCharacter(Character character)
+        public async Task<IActionResult> addCharacter(AddCharacterDto character)
         {
             return Ok(await this.CharacterService.addCharacter(character));
         }
