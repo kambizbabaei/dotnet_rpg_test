@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using pr.dto.Character;
 using pr.models;
 using pr.Models;
 
@@ -8,10 +9,10 @@ namespace pr.services.CharacterService
     public interface ICharacterService
     {
 
-        Task<ServiceResponse<List<Character>>> getAllCharacters();
-        Task<ServiceResponse<Character>> addCharacter(Character character);
-        Task<ServiceResponse<Character>> getFirst();
-        Task<ServiceResponse<Character>> Get(int? id);
+        Task<ServiceResponse<List<GetCharacterDto>>> getAllCharacters();
+        Task<ServiceResponse<GetCharacterDto>> addCharacter(AddCharacterDto character);
+        Task<ServiceResponse<GetCharacterDto>> getFirst();
+        Task<ServiceResponse<GetCharacterDto>> Get(int? id);
 
     }
 }
