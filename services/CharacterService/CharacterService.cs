@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using pr.models;
+using pr.Models;
 using pr.services.CharacterService;
 
 namespace pr.services.CharachterService
@@ -27,27 +28,50 @@ namespace pr.services.CharachterService
         };
 
 
-        public async Task<Character> addCharacter(Character character)
+        public async Task<ServiceResponse<Character>> addCharacter(Character character)
         {
             character.id = characters.Count;
             characters.Add(character);
-            return character;
+            ServiceResponse<Character> response = new ServiceResponse<Character>();
+            response.Data = character;
+            response.isSuccessful = true;
+            response.Message = "request accomplished;";
+            return response;
         }
 
-        public async Task<Character> Get(int? id)
+        public async Task<ServiceResponse<Character>> Get(int? id)
         {
             Character? character = characters.FirstOrDefault(c => c.id == id);
-            return character;
+            ServiceResponse<Character> response = new ServiceResponse<Character>();
+            if (character.Equals(null))
+            {
+                response.Data = null;
+                response.isSuccessful = false;
+                response.Message = "request failed;";
+                return response;
+            }
+            response.Data = character;
+            response.isSuccessful = true;
+            response.Message = "request accomplished;";
+            return response;
         }
 
-        public async Task<List<Character>> getAllCharacters()
+        public async Task<ServiceResponse<List<Character>>> getAllCharacters()
         {
-            return characters;
+            ServiceResponse<List<Character>> response = new ServiceResponse<List<Character>>();
+            response.Data = characters;
+            response.isSuccessful = true;
+            response.Message = "request accomplished;";
+            return response;
         }
 
-        public async Task<Character> getFirst()
+        public async Task<ServiceResponse<Character>> getFirst()
         {
-            return characters[0];
+            ServiceResponse<Character> response = new ServiceResponse<Character>();
+            response.Data = characters[0];
+            response.isSuccessful = true;
+            response.Message = "request accomplished;";
+            return response;
         }
     }
 }

@@ -34,23 +34,19 @@ namespace pr.Controllers
 
 
 
-        //has problem
         [HttpGet("{id?}")]
         public async Task<IActionResult> Get(int? id)
         {
-
             if (!id.HasValue)
             {
                 return BadRequest();
             }
-            else if ((await this.CharacterService.getAllCharacters()).Count - 1 < id)
+            else if (((await this.CharacterService.getAllCharacters()).Data.Count()) - 1 < id)
             {
                 return NotFound();
             }
             return Ok(await this.CharacterService.Get(id));
-
         }
-        // has problem
         [HttpPost]
         public async Task<IActionResult> addCharacter(Character character)
         {

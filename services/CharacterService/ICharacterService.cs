@@ -1,16 +1,17 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using pr.models;
+using pr.Models;
 
 namespace pr.services.CharacterService
 {
     public interface ICharacterService
     {
 
-        Task<List<Character>> getAllCharacters();
-        Task<Character> addCharacter(Character character);
-        Task<Character> getFirst();
-        Task<Character> Get(int? id);
+        Task<ServiceResponse<List<Character>>> getAllCharacters();
+        Task<ServiceResponse<Character>> addCharacter(Character character);
+        Task<ServiceResponse<Character>> getFirst();
+        Task<ServiceResponse<Character>> Get(int? id);
 
     }
 }
