@@ -4,6 +4,7 @@ namespace pr.Models
 {
     public class ServiceResponse<T>
     {
+
         public ServiceResponse()
         {
             Time = DateTime.UtcNow.ToString();

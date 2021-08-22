@@ -1,4 +1,6 @@
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace pr.models
 {
@@ -8,6 +10,7 @@ namespace pr.models
         {
             Time = DateTime.UtcNow.ToString();
         }
+
         public int id { get; set; }
         public string name { get; set; } = "frodo";
         public int hitPoints { get; set; } = 100;
