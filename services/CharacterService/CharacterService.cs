@@ -52,7 +52,7 @@ namespace pr.services.CharachterService
         {
             Character character = characters.FirstOrDefault(c => c.id == id);
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
-            if (character.Equals(null))
+            if (character is null)
             {
                 response.Data = null;
                 response.isSuccessful = false;
@@ -83,6 +83,53 @@ namespace pr.services.CharachterService
             return response;
         }
 
+        public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updateCharacter)
+        {
+            ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
+            Character character = characters.FirstOrDefault(c => c.id == updateCharacter.id);
+            try
+            {
+                character.name = updateCharacter.name;
+                character.characterClass = updateCharacter.characterClass;
+                character.defense = updateCharacter.defense;
+                character.hitPoints = updateCharacter.hitPoints;
+                character.intelligence = updateCharacter.intelligence;
+                character.power = updateCharacter.power;
 
+                response.Data = mapper.Map<GetCharacterDto>(character);
+                response.isSuccessful = true;
+                response.Message = "character updated successfuly.";
+                return response;
+            }
+            catch
+            {
+                response.Data = null;
+                response.isSuccessful = false;
+                response.Message = "request failed; character not found!";
+                return response;
+            }
+        }
+
+        public async Task<ServiceResponse<Character>> DeleteCharacter(int? id)
+        {
+            ServiceResponse<Character> serviceResponse = new ServiceResponse<Character>();
+            Character character = characters.FirstOrDefault(c => c.id == id);
+            try
+            {
+                characters.Remove(character);
+                serviceResponse.Data = null;
+                serviceResponse.isSuccessful = true;
+                serviceResponse.Message = "request compeleted successfuly";
+                return serviceResponse;
+            }
+            catch
+            {
+                serviceResponse.Data = null;
+                serviceResponse.isSuccessful = false;
+                serviceResponse.Message = "request failed";
+                return serviceResponse;
+            }
+            throw new System.NotImplementedException();
+        }
     }
 }

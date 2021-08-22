@@ -53,5 +53,11 @@ namespace pr.Controllers
         {
             return Ok(await this.CharacterService.addCharacter(character));
         }
+
+        [HttpPut("update")]
+        public async Task<IActionResult> updateCharacter(UpdateCharacterDto character)
+        {
+            return Ok(await this.CharacterService.UpdateCharacter(character));
+        }
     }
 }
