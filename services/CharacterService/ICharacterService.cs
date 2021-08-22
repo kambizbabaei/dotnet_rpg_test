@@ -13,6 +13,7 @@ namespace pr.services.CharacterService
         Task<ServiceResponse<GetCharacterDto>> addCharacter(AddCharacterDto character);
         Task<ServiceResponse<GetCharacterDto>> getFirst();
         Task<ServiceResponse<GetCharacterDto>> Get(int? id);
-
+        Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updateCharacter);
+        Task<ServiceResponse<Character>> DeleteCharacter(int? id);
     }
 }
