@@ -16,5 +16,7 @@ namespace pr.Models
         public string Message { get; set; } = null;
 
         public string Time { get; }
+
+        public int Id { get; set; }
     }
 }

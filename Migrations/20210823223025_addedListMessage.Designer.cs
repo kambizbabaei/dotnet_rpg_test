@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using pr.Data;
@@ -9,15 +10,34 @@ using pr.Data;
 namespace pr.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210823223025_addedListMessage")]
+    partial class addedListMessage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+            modelBuilder.Entity("pr.Models.ServiceResponse<System.Collections.Generic.List<pr.models.Character>>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Message")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("isSuccessful")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("serviceListMessage");
+                });
 
             modelBuilder.Entity("pr.Models.ServiceResponse<pr.models.Character>", b =>
                 {
@@ -49,6 +69,9 @@ namespace pr.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<int?>("ServiceResponse<List<Character>>Id")
+                        .HasColumnType("integer");
+
                     b.Property<int>("characterClass")
                         .HasColumnType("integer");
 
@@ -69,6 +92,8 @@ namespace pr.Migrations
 
                     b.HasKey("id");
 
+                    b.HasIndex("ServiceResponse<List<Character>>Id");
+
                     b.ToTable("characters");
                 });
 
@@ -78,6 +103,18 @@ namespace pr.Migrations
                         .WithMany()
                         .HasForeignKey("Dataid");
 
+                    b.Navigation("Data");
+                });
+
+            modelBuilder.Entity("pr.models.Character", b =>
+                {
+                    b.HasOne("pr.Models.ServiceResponse<System.Collections.Generic.List<pr.models.Character>>", null)
+                        .WithMany("Data")
+                        .HasForeignKey("ServiceResponse<List<Character>>Id");
+                });
+
+            modelBuilder.Entity("pr.Models.ServiceResponse<System.Collections.Generic.List<pr.models.Character>>", b =>
+                {
                     b.Navigation("Data");
                 });
 #pragma warning restore 612, 618

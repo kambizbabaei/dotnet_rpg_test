@@ -35,7 +35,6 @@ namespace pr
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "pr", Version = "v1" });
             });
-            services.AddEntityFrameworkNpgsql();
             services.AddDbContext<DataContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("postgres")));
             services.AddScoped<ICharacterService, CharacterServiceWithDb>();
             services.AddAutoMapper(typeof(Startup));

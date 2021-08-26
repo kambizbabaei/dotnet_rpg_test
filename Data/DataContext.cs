@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using pr.models;
 using pr.Models;
@@ -12,6 +13,8 @@ namespace pr.Data
         }
 
         public DbSet<Character> characters { get; set; }
+
+        public DbSet<ServiceResponse<Character>> serviceMessage { get; set; }
 
     }
 }
