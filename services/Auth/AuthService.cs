@@ -87,5 +87,23 @@ namespace pr.services.Auth
                 hash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
             }
         }
+
+        private bool verifyPassword(string password, byte[] hash, byte[] salt)
+        {
+            using (var hmac = new HMACSHA512(salt))
+            {
+                var result = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                for (var i = 0; i < result.Length; i++)
+                {
+                    if (result[i] != hash[i])
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+
+        }
     }
 }
