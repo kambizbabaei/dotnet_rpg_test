@@ -37,8 +37,9 @@ namespace pr
             });
             services.AddDbContext<DataContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("postgres")));
             services.AddScoped<ICharacterService, CharacterServiceWithDb>();
-            services.AddSingleton<IAuthService, AuthService>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddAutoMapper(typeof(Startup));
+
 
         }
 

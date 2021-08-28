@@ -9,7 +9,5 @@ namespace pr.services.Auth
         Task<ServiceResponse<string>> Login(string username, string password);
         Task<ServiceResponse<bool>> UserExist(string username);
         Task<ServiceResponse<string>> UnRegister(string username, string password);
-
-
     }
 }
