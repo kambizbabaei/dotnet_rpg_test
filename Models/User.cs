@@ -11,6 +11,5 @@ namespace pr.Models
         public byte[] passwordSalt { get; set; }
         public List<Character> characters { get; set; }
         public List<Token> Tokens { get; set; }
-
     }
 }

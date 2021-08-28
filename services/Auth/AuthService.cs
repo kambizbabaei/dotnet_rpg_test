@@ -1,3 +1,4 @@
+
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -13,9 +14,31 @@ namespace pr.services.Auth
         {
             this.Database = database;
         }
-        public Task<ServiceResponse<string>> Login(string username, string password)
+        public async Task<ServiceResponse<string>> Login(string Username, string password)
         {
-            throw new System.NotImplementedException();
+            ServiceResponse<string> response = new ServiceResponse<string>();
+            User user = await Database.Users.FirstOrDefaultAsync(x => x.username.ToLower().Equals(Username.ToLower()));
+            if (user == null)
+            {
+                response.isSuccessful = false;
+                response.Message = "username or password is incorrect";
+                response.Data = null;
+            }
+            else if (!verifyPassword(password, user.passwordHash, user.passwordSalt))
+            {
+                response.isSuccessful = false;
+                response.Message = "username or password is incorrect";
+                response.Data = null;
+            }
+            else
+            {
+                response.isSuccessful = true;
+                response.Message = "you have logged in successfully";
+                //TODO token
+                response.Data = "this should be your token";
+            }
+            return response;
+
         }
         public async Task<ServiceResponse<int>> Register(User user, string password)
         {
