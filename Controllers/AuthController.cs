@@ -18,10 +18,21 @@ namespace pr.Controller
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(UserRegisterDto request)
+        public async Task<IActionResult> Register(UserRegisterLoginDto request)
         {
             ServiceResponse<int> response = await AuthService.Register(
                 new User { username = request.Username }, request.Password);
+            if (response.isSuccessful)
+            {
+                return Ok(response);
+            }
+            return BadRequest(response);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> login(UserRegisterLoginDto request)
+        {
+            ServiceResponse<string> response = await AuthService.Login(request.Username, request.Password);
             if (response.isSuccessful)
             {
                 return Ok(response);
