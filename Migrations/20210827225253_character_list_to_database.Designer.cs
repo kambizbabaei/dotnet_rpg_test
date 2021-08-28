@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using pr.Data;
@@ -9,9 +10,10 @@ using pr.Data;
 namespace pr.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210827225253_character_list_to_database")]
+    partial class character_list_to_database
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,6 +72,9 @@ namespace pr.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<int?>("Userid")
+                        .HasColumnType("integer");
+
                     b.Property<int>("characterClass")
                         .HasColumnType("integer");
 
@@ -85,15 +90,12 @@ namespace pr.Migrations
                     b.Property<string>("name")
                         .HasColumnType("text");
 
-                    b.Property<int?>("ownerid")
-                        .HasColumnType("integer");
-
                     b.Property<int>("power")
                         .HasColumnType("integer");
 
                     b.HasKey("id");
 
-                    b.HasIndex("ownerid");
+                    b.HasIndex("Userid");
 
                     b.ToTable("characters");
                 });
@@ -109,11 +111,9 @@ namespace pr.Migrations
 
             modelBuilder.Entity("pr.models.Character", b =>
                 {
-                    b.HasOne("pr.Models.User", "owner")
+                    b.HasOne("pr.Models.User", null)
                         .WithMany("characters")
-                        .HasForeignKey("ownerid");
-
-                    b.Navigation("owner");
+                        .HasForeignKey("Userid");
                 });
 
             modelBuilder.Entity("pr.Models.User", b =>

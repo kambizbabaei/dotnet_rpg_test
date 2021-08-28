@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using pr.Data;
@@ -9,9 +10,10 @@ using pr.Data;
 namespace pr.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210827224851_add_user_to_db")]
+    partial class add_user_to_db
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,15 +87,10 @@ namespace pr.Migrations
                     b.Property<string>("name")
                         .HasColumnType("text");
 
-                    b.Property<int?>("ownerid")
-                        .HasColumnType("integer");
-
                     b.Property<int>("power")
                         .HasColumnType("integer");
 
                     b.HasKey("id");
-
-                    b.HasIndex("ownerid");
 
                     b.ToTable("characters");
                 });
@@ -105,20 +102,6 @@ namespace pr.Migrations
                         .HasForeignKey("Dataid");
 
                     b.Navigation("Data");
-                });
-
-            modelBuilder.Entity("pr.models.Character", b =>
-                {
-                    b.HasOne("pr.Models.User", "owner")
-                        .WithMany("characters")
-                        .HasForeignKey("ownerid");
-
-                    b.Navigation("owner");
-                });
-
-            modelBuilder.Entity("pr.Models.User", b =>
-                {
-                    b.Navigation("characters");
                 });
 #pragma warning restore 612, 618
         }
