@@ -14,7 +14,7 @@ namespace pr.Data
 
         public DbSet<Character> characters { get; set; }
 
-        public DbSet<ServiceResponse<Character>> serviceMessage { get; set; }
+        // public DbSet<ServiceResponse<Character>> serviceMessage { get; set; }
         public DbSet<User> users { get; set; }
 
     }
