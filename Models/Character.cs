@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using pr.Models;
 
 namespace pr.models
 {
@@ -19,6 +20,9 @@ namespace pr.models
         public int intelligence { get; set; } = 100;
         public RpgClass characterClass { get; set; } = RpgClass.knight;
         public string Time { get; }
+
+        public User owner { get; set; }
+
 
     }
 }

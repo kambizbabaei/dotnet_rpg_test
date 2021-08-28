@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using pr.Data;
@@ -9,9 +10,10 @@ using pr.Data;
 namespace pr.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210827224851_add_user_to_db")]
+    partial class add_user_to_db
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,27 +21,27 @@ namespace pr.Migrations
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("pr.Models.Token", b =>
+            modelBuilder.Entity("pr.Models.ServiceResponse<pr.models.Character>", b =>
                 {
-                    b.Property<int>("id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("Userid")
+                    b.Property<int?>("Dataid")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("time")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<string>("Message")
+                        .HasColumnType("text");
 
-                    b.Property<byte[]>("token")
-                        .HasColumnType("bytea");
+                    b.Property<bool>("isSuccessful")
+                        .HasColumnType("boolean");
 
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
-                    b.HasIndex("Userid");
+                    b.HasIndex("Dataid");
 
-                    b.ToTable("Token");
+                    b.ToTable("serviceMessage");
                 });
 
             modelBuilder.Entity("pr.Models.User", b =>
@@ -60,7 +62,7 @@ namespace pr.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Users");
+                    b.ToTable("users");
                 });
 
             modelBuilder.Entity("pr.models.Character", b =>
@@ -85,40 +87,21 @@ namespace pr.Migrations
                     b.Property<string>("name")
                         .HasColumnType("text");
 
-                    b.Property<int?>("ownerid")
-                        .HasColumnType("integer");
-
                     b.Property<int>("power")
                         .HasColumnType("integer");
 
                     b.HasKey("id");
 
-                    b.HasIndex("ownerid");
-
                     b.ToTable("characters");
                 });
 
-            modelBuilder.Entity("pr.Models.Token", b =>
+            modelBuilder.Entity("pr.Models.ServiceResponse<pr.models.Character>", b =>
                 {
-                    b.HasOne("pr.Models.User", null)
-                        .WithMany("Tokens")
-                        .HasForeignKey("Userid");
-                });
+                    b.HasOne("pr.models.Character", "Data")
+                        .WithMany()
+                        .HasForeignKey("Dataid");
 
-            modelBuilder.Entity("pr.models.Character", b =>
-                {
-                    b.HasOne("pr.Models.User", "owner")
-                        .WithMany("characters")
-                        .HasForeignKey("ownerid");
-
-                    b.Navigation("owner");
-                });
-
-            modelBuilder.Entity("pr.Models.User", b =>
-                {
-                    b.Navigation("characters");
-
-                    b.Navigation("Tokens");
+                    b.Navigation("Data");
                 });
 #pragma warning restore 612, 618
         }

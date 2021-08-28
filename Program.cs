@@ -14,6 +14,7 @@ namespace pr
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -22,5 +23,7 @@ namespace pr
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
     }
+
 }

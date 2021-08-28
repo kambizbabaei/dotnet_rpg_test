@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using pr.Data;
+using pr.services.Auth;
 using pr.services.CharacterService;
 
 namespace pr
@@ -29,16 +30,16 @@ namespace pr
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // services.AddDbContext<DataContext>(x => x.use);
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "pr", Version = "v1" });
             });
-            services.AddEntityFrameworkNpgsql();
             services.AddDbContext<DataContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("postgres")));
             services.AddScoped<ICharacterService, CharacterServiceWithDb>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddAutoMapper(typeof(Startup));
+
 
         }
 

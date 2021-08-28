@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using pr.Data;
@@ -9,38 +10,16 @@ using pr.Data;
 namespace pr.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210828185047_added_user_auth")]
+    partial class added_user_auth
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-            modelBuilder.Entity("pr.Models.Token", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int?>("Userid")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("time")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<byte[]>("token")
-                        .HasColumnType("bytea");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("Userid");
-
-                    b.ToTable("Token");
-                });
 
             modelBuilder.Entity("pr.Models.User", b =>
                 {
@@ -98,13 +77,6 @@ namespace pr.Migrations
                     b.ToTable("characters");
                 });
 
-            modelBuilder.Entity("pr.Models.Token", b =>
-                {
-                    b.HasOne("pr.Models.User", null)
-                        .WithMany("Tokens")
-                        .HasForeignKey("Userid");
-                });
-
             modelBuilder.Entity("pr.models.Character", b =>
                 {
                     b.HasOne("pr.Models.User", "owner")
@@ -117,8 +89,6 @@ namespace pr.Migrations
             modelBuilder.Entity("pr.Models.User", b =>
                 {
                     b.Navigation("characters");
-
-                    b.Navigation("Tokens");
                 });
 #pragma warning restore 612, 618
         }
