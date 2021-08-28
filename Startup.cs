@@ -30,14 +30,13 @@ namespace pr
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // services.AddDbContext<DataContext>(x => x.use);
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "pr", Version = "v1" });
             });
             services.AddDbContext<DataContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("postgres")));
-            services.AddSingleton<ICharacterService, CharacterServiceWithDb>();
+            services.AddScoped<ICharacterService, CharacterServiceWithDb>();
             services.AddSingleton<IAuthService, AuthService>();
             services.AddAutoMapper(typeof(Startup));
 
