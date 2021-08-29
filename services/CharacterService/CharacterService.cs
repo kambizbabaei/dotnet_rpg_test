@@ -36,7 +36,7 @@ namespace pr.services.CharachterService
         };
 
 
-        public async Task<ServiceResponse<GetCharacterDto>> addCharacter(AddCharacterDto inCharacter)
+        public async Task<ServiceResponse<GetCharacterDto>> addCharacter(int userid, AddCharacterDto inCharacter)
         {
             Character character = mapper.Map<Character>(inCharacter);
             character.id = characters.Count;
@@ -48,7 +48,7 @@ namespace pr.services.CharachterService
             return response;
         }
 
-        public async Task<ServiceResponse<GetCharacterDto>> Get(int? id)
+        public async Task<ServiceResponse<GetCharacterDto>> Get(int userid, int? id)
         {
             Character character = characters.FirstOrDefault(c => c.id == id);
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
@@ -65,7 +65,7 @@ namespace pr.services.CharachterService
             return response;
         }
 
-        public async Task<ServiceResponse<List<GetCharacterDto>>> getAllCharacters()
+        public async Task<ServiceResponse<List<GetCharacterDto>>> getAllCharacters(int userid)
         {
             ServiceResponse<List<GetCharacterDto>> response = new ServiceResponse<List<GetCharacterDto>>();
             response.Data = (characters.Select(c => mapper.Map<GetCharacterDto>(c))).ToList();
@@ -74,7 +74,7 @@ namespace pr.services.CharachterService
             return response;
         }
 
-        public async Task<ServiceResponse<GetCharacterDto>> getFirst()
+        public async Task<ServiceResponse<GetCharacterDto>> getFirst(int userid)
         {
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
             response.Data = mapper.Map<GetCharacterDto>(characters[0]);
@@ -83,7 +83,7 @@ namespace pr.services.CharachterService
             return response;
         }
 
-        public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updateCharacter)
+        public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(int userid, UpdateCharacterDto updateCharacter)
         {
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
             Character character = characters.FirstOrDefault(c => c.id == updateCharacter.id);
@@ -110,7 +110,7 @@ namespace pr.services.CharachterService
             }
         }
 
-        public async Task<ServiceResponse<Character>> DeleteCharacter(int? id)
+        public async Task<ServiceResponse<Character>> DeleteCharacter(int userid, int? id)
         {
             ServiceResponse<Character> serviceResponse = new ServiceResponse<Character>();
             Character character = characters.FirstOrDefault(c => c.id == id);
