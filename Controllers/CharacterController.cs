@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using pr.dto.Character;
 using pr.models;
@@ -9,6 +11,7 @@ using pr.services.CharacterService;
 
 namespace pr.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class CharacterController : ControllerBase
@@ -24,13 +27,16 @@ namespace pr.Controllers
         [HttpGet("GetFirst")]
         public async Task<IActionResult> GetFirst()
         {
-            return Ok(await this.CharacterService.getFirst());
+            int UserId = int.Parse((User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)).Value);
+            return Ok(await this.CharacterService.getFirst(UserId));
         }
 
         [HttpGet("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await this.CharacterService.getAllCharacters());
+
+            int UserId = int.Parse((User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)).Value);
+            return Ok(await this.CharacterService.getAllCharacters(UserId));
         }
 
 
@@ -38,26 +44,29 @@ namespace pr.Controllers
         [HttpGet("{id?}")]
         public async Task<IActionResult> Get(int? id)
         {
+            int UserId = int.Parse((User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)).Value);
             if (!id.HasValue)
             {
                 return BadRequest();
             }
-            else if (((await this.CharacterService.getAllCharacters()).Data.Count()) - 1 < id)
+            else if (((await this.CharacterService.getAllCharacters(UserId)).Data.Count()) - 1 < id)
             {
                 return NotFound();
             }
-            return Ok(await this.CharacterService.Get(id));
+            return Ok(await this.CharacterService.Get(UserId, id));
         }
-        [HttpPost]
+        [HttpPost("addcharacter")]
         public async Task<IActionResult> addCharacter(AddCharacterDto character)
         {
-            return Ok(await this.CharacterService.addCharacter(character));
+            int UserId = int.Parse((User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)).Value);
+            return Ok(await this.CharacterService.addCharacter(UserId, character));
         }
 
         [HttpPut("update")]
         public async Task<IActionResult> updateCharacter(UpdateCharacterDto character)
         {
-            return Ok(await this.CharacterService.UpdateCharacter(character));
+            int UserId = int.Parse((User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)).Value);
+            return Ok(await this.CharacterService.UpdateCharacter(UserId, character));
         }
     }
 }

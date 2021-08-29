@@ -1,7 +1,13 @@
 
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using pr.Data;
 using pr.Models;
 
@@ -10,8 +16,12 @@ namespace pr.services.Auth
     public class AuthService : IAuthService
     {
         public readonly DataContext Database;
-        public AuthService(DataContext database)
+        public readonly IConfiguration Configuration;
+        private SecurityTokenDescriptor tokenDescriptor;
+
+        public AuthService(DataContext database, IConfiguration configuration)
         {
+            this.Configuration = configuration;
             this.Database = database;
         }
         public async Task<ServiceResponse<string>> Login(string Username, string password)
@@ -34,8 +44,7 @@ namespace pr.services.Auth
             {
                 response.isSuccessful = true;
                 response.Message = "you have logged in successfully";
-                //TODO token
-                response.Data = "this should be your token";
+                response.Data = await createToken(user);
             }
             return response;
 
@@ -127,6 +136,29 @@ namespace pr.services.Auth
             }
 
 
+        }
+        private async Task<string> createToken(User user)
+        {
+            // TODO need to be explained
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier,user.id.ToString()),
+                new Claim(ClaimTypes.Name,user.username.ToString()),
+            };
+
+            SymmetricSecurityKey key = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(Configuration.GetSection("AppSettings:Token").Value)
+            );
+
+            SigningCredentials credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                SigningCredentials = credentials
+            };
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token).ToString();
         }
     }
 }

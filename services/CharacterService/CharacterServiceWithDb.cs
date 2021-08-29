@@ -12,8 +12,8 @@ namespace pr.services.CharacterService
 {
     public class CharacterServiceWithDb : ICharacterService
     {
-        public IMapper mapper { get; }
-        public DataContext Db { get; }
+        public readonly IMapper mapper;
+        public readonly DataContext Db;
 
         public CharacterServiceWithDb(IMapper mapper, DataContext db)
         {
@@ -22,9 +22,11 @@ namespace pr.services.CharacterService
 
         }
 
-        public async Task<ServiceResponse<GetCharacterDto>> addCharacter(AddCharacterDto inCharacter)
+        public async Task<ServiceResponse<GetCharacterDto>> addCharacter(int userid, AddCharacterDto inCharacter)
         {
+
             Character character = mapper.Map<Character>(inCharacter);
+            character.owner = await Db.Users.Where(u => u.id == userid).FirstOrDefaultAsync();
             await Db.characters.AddAsync(character);
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
             await Db.SaveChangesAsync();
@@ -34,7 +36,7 @@ namespace pr.services.CharacterService
             return response;
         }
 
-        public async Task<ServiceResponse<GetCharacterDto>> Get(int? id)
+        public async Task<ServiceResponse<GetCharacterDto>> Get(int userid, int? id)
         {
             Character character = (await Db.characters.FirstOrDefaultAsync(c => c.id == id));
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
@@ -51,28 +53,30 @@ namespace pr.services.CharacterService
             return response;
         }
 
-        public async Task<ServiceResponse<List<GetCharacterDto>>> getAllCharacters()
+        public async Task<ServiceResponse<List<GetCharacterDto>>> getAllCharacters(int userid)
         {
             ServiceResponse<List<GetCharacterDto>> response = new ServiceResponse<List<GetCharacterDto>>();
-            response.Data = ((await Db.characters.ToListAsync()).Select(c => mapper.Map<GetCharacterDto>(c))).ToList();
+
+            // response.Data = ((await Db.characters.ToListAsync()).Select(c => mapper.Map<GetCharacterDto>(c))).ToList();
+            response.Data = ((await Db.characters.Where(x => x.owner.id == userid).ToListAsync()).Select(c => mapper.Map<GetCharacterDto>(c))).ToList();
             response.isSuccessful = true;
             response.Message = "request accomplished;";
             return response;
         }
 
-        public async Task<ServiceResponse<GetCharacterDto>> getFirst()
+        public async Task<ServiceResponse<GetCharacterDto>> getFirst(int userid)
         {
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
-            response.Data = mapper.Map<GetCharacterDto>((await Db.characters.FirstAsync()));
+            response.Data = mapper.Map<GetCharacterDto>((await Db.characters.Where(x => x.owner.id == userid).FirstAsync()));
             response.isSuccessful = true;
             response.Message = "request accomplished;";
             return response;
         }
 
-        public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updateCharacter)
+        public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(int userid, UpdateCharacterDto updateCharacter)
         {
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
-            Character character = await Db.characters.FirstOrDefaultAsync(c => c.id == updateCharacter.id);
+            Character character = await Db.characters.Where(x => x.owner.id == userid).FirstOrDefaultAsync(c => c.id == updateCharacter.id);
             try
             {
                 character.name = updateCharacter.name;
@@ -97,10 +101,11 @@ namespace pr.services.CharacterService
             }
         }
 
-        public async Task<ServiceResponse<Character>> DeleteCharacter(int? id)
+        public async Task<ServiceResponse<Character>> DeleteCharacter(int userid, int? id)
         {
             ServiceResponse<Character> serviceResponse = new ServiceResponse<Character>();
-            Character character = await Db.characters.FirstOrDefaultAsync(c => c.id == id);
+            Character character = await Db.characters.Where(x => x.owner.id == userid).FirstOrDefaultAsync(c => c.id == id);
+
             try
             {
                 Db.characters.Remove(character);
