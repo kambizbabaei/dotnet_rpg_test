@@ -12,8 +12,8 @@ namespace pr.services.CharacterService
         Task<ServiceResponse<List<GetCharacterDto>>> getAllCharacters(int userid);
         Task<ServiceResponse<GetCharacterDto>> addCharacter(int userid, AddCharacterDto character);
         Task<ServiceResponse<GetCharacterDto>> getFirst(int userid);
-        Task<ServiceResponse<GetCharacterDto>> Get(int userid, int? id);
+        Task<ServiceResponse<GetCharacterDto>> Get(int userid, int id);
         Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(int userid, UpdateCharacterDto updateCharacter);
-        Task<ServiceResponse<Character>> DeleteCharacter(int userid, int? id);
+        Task<ServiceResponse<Character>> DeleteCharacter(int userid, int id);
     }
 }
