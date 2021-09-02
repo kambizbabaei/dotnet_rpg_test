@@ -26,7 +26,7 @@ namespace pr.services.CharacterService
         {
 
             Character character = mapper.Map<Character>(inCharacter);
-            character.owner = await Db.Users.Where(u => u.id == userid).FirstOrDefaultAsync();
+            character.owner = await Db.Users.Where(u => u.Id == userid).FirstOrDefaultAsync();
             await Db.characters.AddAsync(character);
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
             await Db.SaveChangesAsync();
@@ -38,7 +38,7 @@ namespace pr.services.CharacterService
 
         public async Task<ServiceResponse<GetCharacterDto>> Get(int userid, int? id)
         {
-            Character character = (await Db.characters.FirstOrDefaultAsync(c => c.id == id));
+            Character character = (await Db.characters.FirstOrDefaultAsync(c => c.Id == id));
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
             if (character is null)
             {
@@ -58,7 +58,7 @@ namespace pr.services.CharacterService
             ServiceResponse<List<GetCharacterDto>> response = new ServiceResponse<List<GetCharacterDto>>();
 
             // response.Data = ((await Db.characters.ToListAsync()).Select(c => mapper.Map<GetCharacterDto>(c))).ToList();
-            response.Data = ((await Db.characters.Where(x => x.owner.id == userid).ToListAsync()).Select(c => mapper.Map<GetCharacterDto>(c))).ToList();
+            response.Data = ((await Db.characters.Where(x => x.owner.Id == userid).ToListAsync()).Select(c => mapper.Map<GetCharacterDto>(c))).ToList();
             response.isSuccessful = true;
             response.Message = "request accomplished;";
             return response;
@@ -67,7 +67,7 @@ namespace pr.services.CharacterService
         public async Task<ServiceResponse<GetCharacterDto>> getFirst(int userid)
         {
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
-            response.Data = mapper.Map<GetCharacterDto>((await Db.characters.Where(x => x.owner.id == userid).FirstAsync()));
+            response.Data = mapper.Map<GetCharacterDto>((await Db.characters.Where(x => x.owner.Id == userid).FirstAsync()));
             response.isSuccessful = true;
             response.Message = "request accomplished;";
             return response;
@@ -76,7 +76,7 @@ namespace pr.services.CharacterService
         public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(int userid, UpdateCharacterDto updateCharacter)
         {
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
-            Character character = await Db.characters.Where(x => x.owner.id == userid).FirstOrDefaultAsync(c => c.id == updateCharacter.id);
+            Character character = await Db.characters.Where(x => x.owner.Id == userid).FirstOrDefaultAsync(c => c.Id == updateCharacter.id);
             try
             {
                 character.name = updateCharacter.name;
@@ -104,7 +104,7 @@ namespace pr.services.CharacterService
         public async Task<ServiceResponse<Character>> DeleteCharacter(int userid, int? id)
         {
             ServiceResponse<Character> serviceResponse = new ServiceResponse<Character>();
-            Character character = await Db.characters.Where(x => x.owner.id == userid).FirstOrDefaultAsync(c => c.id == id);
+            Character character = await Db.characters.Where(x => x.owner.Id == userid).FirstOrDefaultAsync(c => c.Id == id);
 
             try
             {

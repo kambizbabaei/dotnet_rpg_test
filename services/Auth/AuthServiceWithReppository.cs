@@ -1,29 +1,24 @@
-
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper.Configuration;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using pr.Data;
 using pr.Models;
 
 namespace pr.services.Auth
 {
-    public class AuthService : IAuthService
+    public class AuthServiceWithReppository : IAuthService
     {
         public readonly DataContext Database;
         public readonly IConfiguration Configuration;
         private SecurityTokenDescriptor tokenDescriptor;
 
-        public AuthService(DataContext database, IConfiguration configuration)
-        {
-            this.Configuration = configuration;
-            this.Database = database;
-        }
+
         public async Task<ServiceResponse<string>> Login(string Username, string password)
         {
             ServiceResponse<string> response = new ServiceResponse<string>();

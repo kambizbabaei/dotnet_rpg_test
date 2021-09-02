@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using pr.Core.interfaces.IConfiguration;
 using pr.Data;
 using pr.services.Auth;
 using pr.services.CharacterService;
@@ -57,7 +58,7 @@ namespace pr
                     ValidateAudience = false
                 };
             });
-
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         }
 
