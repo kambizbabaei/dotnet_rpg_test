@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
-using pr.Core.interfaces.IRepository;
+using pr.Core.Repository;
 
 namespace pr.Core.interfaces.IConfiguration
 {
     public interface IUnitOfWork
     {
-        IUserRepository Users { get; }
-        ICharacterRepository Characters { get; }
+        UserRepository Users { get; }
+        CharacterRepository Characters { get; }
         Task Complete();
     }
 }

@@ -48,7 +48,7 @@ namespace pr.services.CharachterService
             return response;
         }
 
-        public async Task<ServiceResponse<GetCharacterDto>> Get(int userid, int? id)
+        public async Task<ServiceResponse<GetCharacterDto>> Get(int userid, int id)
         {
             Character character = characters.FirstOrDefault(c => c.Id == id);
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
@@ -110,7 +110,7 @@ namespace pr.services.CharachterService
             }
         }
 
-        public async Task<ServiceResponse<Character>> DeleteCharacter(int userid, int? id)
+        public async Task<ServiceResponse<Character>> DeleteCharacter(int userid, int id)
         {
             ServiceResponse<Character> serviceResponse = new ServiceResponse<Character>();
             Character character = characters.FirstOrDefault(c => c.Id == id);

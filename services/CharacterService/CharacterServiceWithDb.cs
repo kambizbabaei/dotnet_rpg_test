@@ -36,7 +36,7 @@ namespace pr.services.CharacterService
             return response;
         }
 
-        public async Task<ServiceResponse<GetCharacterDto>> Get(int userid, int? id)
+        public async Task<ServiceResponse<GetCharacterDto>> Get(int userid, int id)
         {
             Character character = (await Db.characters.FirstOrDefaultAsync(c => c.Id == id));
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
@@ -101,7 +101,7 @@ namespace pr.services.CharacterService
             }
         }
 
-        public async Task<ServiceResponse<Character>> DeleteCharacter(int userid, int? id)
+        public async Task<ServiceResponse<Character>> DeleteCharacter(int userid, int id)
         {
             ServiceResponse<Character> serviceResponse = new ServiceResponse<Character>();
             Character character = await Db.characters.Where(x => x.owner.Id == userid).FirstOrDefaultAsync(c => c.Id == id);

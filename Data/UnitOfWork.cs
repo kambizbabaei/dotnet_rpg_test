@@ -11,8 +11,8 @@ namespace pr.Data
     {
         public DataContext Context { get; }
         public ILogger Logger { get; }
-        public IUserRepository Users { get; }
-        public ICharacterRepository Characters { get; }
+        public UserRepository Users { get; }
+        public CharacterRepository Characters { get; }
         public UnitOfWork(ILoggerFactory logger, DataContext context)
         {
             this.Context = context;

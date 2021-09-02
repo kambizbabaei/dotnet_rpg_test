@@ -42,14 +42,11 @@ namespace pr.Controllers
 
 
         [HttpGet("{id?}")]
-        public async Task<IActionResult> Get(int? id)
+        public async Task<IActionResult> Get(int id)
         {
             int UserId = int.Parse((User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)).Value);
-            if (!id.HasValue)
-            {
-                return BadRequest();
-            }
-            else if (((await this.CharacterService.getAllCharacters(UserId)).Data.Count()) - 1 < id)
+
+            if (((await this.CharacterService.getAllCharacters(UserId)).Data.Count()) - 1 < id)
             {
                 return NotFound();
             }
@@ -68,5 +65,7 @@ namespace pr.Controllers
             int UserId = int.Parse((User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)).Value);
             return Ok(await this.CharacterService.UpdateCharacter(UserId, character));
         }
+
+        // todo implenet delete character
     }
 }

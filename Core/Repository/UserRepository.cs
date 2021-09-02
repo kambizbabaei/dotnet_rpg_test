@@ -17,6 +17,20 @@ namespace pr.Core.Repository
         {
         }
 
+        public async Task<User> findByUsernameAsync(string username)
+        {
+            try
+            {
+                User user = await dbset.FirstOrDefaultAsync(x => x.username.ToLower().Equals(username.ToLower()));
+                return user;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "{Repo} findByUsernameAsync error", typeof(UserRepository));
+                return null;
+            }
+        }
+
         public override async Task<bool> Upsert(User entity)
         {
             try

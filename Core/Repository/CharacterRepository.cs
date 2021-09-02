@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -13,6 +15,20 @@ namespace pr.Core.Repository
         public CharacterRepository(DataContext Db, ILogger logger, DbSet<Character> dbset) : base(Db, logger, dbset)
         {
         }
+
+        public async Task<IEnumerable<Character>> GetUsersCharacters(int userid)
+        {
+            try
+            {
+                return dbset.Where(x => x.owner.Id == userid);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex, "{Repo} GetUsersCharacters error", typeof(UserRepository));
+                return new List<Character>();
+            }
+        }
+
         public override async Task<bool> Upsert(Character entity)
         {
             try

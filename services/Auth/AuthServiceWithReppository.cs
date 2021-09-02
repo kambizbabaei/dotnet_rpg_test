@@ -4,25 +4,33 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using AutoMapper.Configuration;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using pr.Data;
+using pr.Core.interfaces.IConfiguration;
+using pr.Core.Repository;
 using pr.Models;
 
 namespace pr.services.Auth
 {
     public class AuthServiceWithReppository : IAuthService
     {
-        public readonly DataContext Database;
-        public readonly IConfiguration Configuration;
-        private SecurityTokenDescriptor tokenDescriptor;
 
+        public IConfiguration Configuration { get; }
+        public UserRepository users { get; }
+        public IUnitOfWork UnitOfWork { get; }
+
+        public AuthServiceWithReppository(IConfiguration configuration, IUnitOfWork unitOfWork)
+        {
+            this.UnitOfWork = unitOfWork;
+            this.users = unitOfWork.Users;
+            this.Configuration = configuration;
+
+        }
 
         public async Task<ServiceResponse<string>> Login(string Username, string password)
         {
             ServiceResponse<string> response = new ServiceResponse<string>();
-            User user = await Database.Users.FirstOrDefaultAsync(x => x.username.ToLower().Equals(Username.ToLower()));
+            User user = await users.findByUsernameAsync(Username);
             if (user == null)
             {
                 response.isSuccessful = false;
@@ -60,8 +68,8 @@ namespace pr.services.Auth
                 createPassword(password, out byte[] hash, out byte[] salt);
                 user.passwordHash = hash;
                 user.passwordSalt = salt;
-                await Database.AddAsync(user);
-                await Database.SaveChangesAsync();
+                await users.Add(user);
+                await UnitOfWork.Complete();
                 response.Data = user.Id;
                 response.isSuccessful = true;
                 response.Message = "Acount created succesfully";
@@ -85,7 +93,7 @@ namespace pr.services.Auth
             ServiceResponse<bool> response = new ServiceResponse<bool>();
             try
             {
-                if (await Database.Users.AnyAsync(user => user.username.ToLower() == username.ToLower()))
+                if (await users.findByUsernameAsync(username) != null)
                 {
                     response.isSuccessful = false;
                     response.Message = "username already exists";

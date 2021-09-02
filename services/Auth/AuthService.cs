@@ -17,7 +17,6 @@ namespace pr.services.Auth
     {
         public readonly DataContext Database;
         public readonly IConfiguration Configuration;
-        private SecurityTokenDescriptor tokenDescriptor;
 
         public AuthService(DataContext database, IConfiguration configuration)
         {
