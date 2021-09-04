@@ -8,11 +8,11 @@ namespace pr.models
 {
     public class Character : entity
     {
+
         public Character()
         {
             Time = DateTime.UtcNow.ToString();
         }
-
         public override int Id { get; set; }
         public string name { get; set; } = "frodo";
         public int hitPoints { get; set; } = 100;
@@ -21,8 +21,9 @@ namespace pr.models
         public int intelligence { get; set; } = 100;
         public RpgClass characterClass { get; set; } = RpgClass.knight;
         public string Time { get; }
-
         public User owner { get; set; }
+#nullable enable
+        public Weapon? weapon { get; set; }
 
 
     }

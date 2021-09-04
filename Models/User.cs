@@ -13,5 +13,7 @@ namespace pr.Models
         public List<Character> characters { get; set; }
         public List<Token> Tokens { get; set; }
         public override int Id { get; set; }
+        public ICollection<Weapon> Weapons { get; set; }
+
     }
 }
