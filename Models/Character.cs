@@ -22,9 +22,9 @@ namespace pr.models
         public RpgClass characterClass { get; set; } = RpgClass.knight;
         public string Time { get; }
         public User owner { get; set; }
-#nullable enable
-        public Weapon? weapon { get; set; }
 
+        [ForeignKey("weapon")]
+        public OwnedWeapon Weapon { get; set; } = null;
 
     }
 }
