@@ -14,6 +14,8 @@ namespace pr.Data
         public UserRepository Users { get; }
         public CharacterRepository Characters { get; }
         public WeaponRepository Weapons { get; }
+
+        public OwnedWeaponRepository UserWeapons { get; }
         public UnitOfWork(ILoggerFactory logger, DataContext context)
         {
             this.Context = context;
@@ -21,6 +23,7 @@ namespace pr.Data
             Users = new UserRepository(context, Logger, context.Users);
             Characters = new CharacterRepository(context, Logger, context.characters);
             Weapons = new WeaponRepository(context, Logger, context.Weapons);
+            UserWeapons = new OwnedWeaponRepository(context, Logger, context.UserWeapons);
         }
 
         public async Task Complete()
