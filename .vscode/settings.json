@@ -11,5 +11,13 @@
             "database": "rpgDotnet"
         }
     
-    ]
+    ],
+    "files.exclude": {
+        ".vs/": true,
+        ".vscode/": true,
+        "bin/": true,
+        "obj/": true,
+        "pr.code-workspace": true,
+        "Properties/": true
+    }
 }

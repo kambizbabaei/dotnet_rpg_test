@@ -13,12 +13,14 @@ namespace pr.Data
         public ILogger Logger { get; }
         public UserRepository Users { get; }
         public CharacterRepository Characters { get; }
+        public WeaponRepository Weapons { get; }
         public UnitOfWork(ILoggerFactory logger, DataContext context)
         {
             this.Context = context;
             Logger = logger.CreateLogger("logs");
             Users = new UserRepository(context, Logger, context.Users);
             Characters = new CharacterRepository(context, Logger, context.characters);
+            Weapons = new WeaponRepository(context, Logger, context.Weapons);
         }
 
         public async Task Complete()

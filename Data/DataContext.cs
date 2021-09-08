@@ -16,6 +16,8 @@ namespace pr.Data
 
         // public DbSet<ServiceResponse<Character>> serviceMessage { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Weapon> Weapons { get; set; }
+        public DbSet<OwnedWeapon> UserWeapons { get; set; }
 
     }
 }

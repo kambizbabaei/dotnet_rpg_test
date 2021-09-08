@@ -7,6 +7,7 @@ namespace pr.Core.interfaces.IConfiguration
     {
         UserRepository Users { get; }
         CharacterRepository Characters { get; }
+        WeaponRepository Weapons { get; }
         Task Complete();
     }
 }
