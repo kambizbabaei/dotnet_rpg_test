@@ -16,11 +16,14 @@ namespace pr.services.StoreService
         {
             this.UnitOfWork = unitOfWork;
             this.WeaponRepository = UnitOfWork.Weapons;
+            this.UserRepository = UnitOfWork.Users;
+            this.UserWeaponRepository = UnitOfWork.UserWeapons;
             this.mapper = mapper;
         }
         public IUnitOfWork UnitOfWork { get; }
         public WeaponRepository WeaponRepository { get; }
-        // public UserRepository UserRepository { get; }
+        public OwnedWeaponRepository UserWeaponRepository { get; }
+        public UserRepository UserRepository { get; }
 
         public async Task<ServiceResponse<getWeaponDto>> AddWeapon(addWeaponDto weapon)
         {
@@ -31,6 +34,7 @@ namespace pr.services.StoreService
                 response.Data = mapper.Map<getWeaponDto>(weapon_);
                 response.isSuccessful = true;
                 response.Message = "weapon added successfully";
+                await UnitOfWork.Complete();
                 return response;
             }
             response.Data = null;
@@ -49,9 +53,20 @@ namespace pr.services.StoreService
 
         }
 
-        public Task<ServiceResponse<getWeaponDto>> PurchaseWeapon(int weaponId, int userid)
+        public async Task<ServiceResponse<OwnedWeapon>> PurchaseWeapon(int weaponId, int userid)
         {
-            throw new System.NotImplementedException();
+            // todo : add userWeaponDto
+            OwnedWeapon weapon = new OwnedWeapon();
+            weapon.user = await UserRepository.Find(userid);
+            weapon.weapon = await WeaponRepository.Find(weaponId);
+            weapon.Health = 100;
+            await UserWeaponRepository.Add(weapon);
+            ServiceResponse<OwnedWeapon> response = new ServiceResponse<OwnedWeapon>();
+            response.Data = weapon;
+            response.isSuccessful = true;
+            response.Message = "weapon purchased successful";
+            return response;
+
         }
 
         public async Task<ServiceResponse<bool>> RemoveWeapon(int weaponId)
@@ -62,6 +77,7 @@ namespace pr.services.StoreService
                 response.Data = true;
                 response.isSuccessful = true;
                 response.Message = "weapon removed successfully";
+                await UnitOfWork.Complete();
                 return response;
             }
             response.Data = false;

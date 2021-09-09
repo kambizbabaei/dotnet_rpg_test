@@ -9,7 +9,7 @@ namespace pr.services.StoreService
     {
         Task<ServiceResponse<getWeaponDto>> AddWeapon(addWeaponDto weapon);
         Task<ServiceResponse<bool>> RemoveWeapon(int weaponId);
-        Task<ServiceResponse<getWeaponDto>> PurchaseWeapon(int weaponId, int userid);
+        Task<ServiceResponse<OwnedWeapon>> PurchaseWeapon(int weaponId, int userid);
         Task<ServiceResponse<List<getWeaponDto>>> AllWeapons();
 
     }
