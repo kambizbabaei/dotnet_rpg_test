@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using pr.Models.baseClass;
+using cls.majvacore.infra.Domain.Entities;
+
 
 namespace pr.Core.interfaces.IRepository
 {
-    public interface IGenericRepository<T> where T : entity
+    public interface IGenericRepository<T> where T : IEntity
     {
         Task<IEnumerable<T>> All();
         Task<bool> Upsert(T entity);

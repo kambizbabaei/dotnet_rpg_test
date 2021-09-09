@@ -32,8 +32,8 @@ namespace pr.services.CharacterService
         {
 
             Character character = mapper.Map<Character>(inCharacter);
-            character.owner = await UserRepository.Find(userid);
-            await CharacterRepository.Add(character);
+            character.owner = await UserRepository.GetByIdAsync(userid);
+            await CharacterRepository.InsertAsync(character);
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
             response.Data = mapper.Map<GetCharacterDto>(character);
             response.isSuccessful = true;
@@ -44,7 +44,7 @@ namespace pr.services.CharacterService
 
         public async Task<ServiceResponse<GetCharacterDto>> Get(int userid, int id)
         {
-            Character character = (await CharacterRepository.Find(id));
+            Character character = (await CharacterRepository.GetByIdAsync(id));
 
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
             if (character is null)
@@ -90,7 +90,7 @@ namespace pr.services.CharacterService
         public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(int userid, UpdateCharacterDto updateCharacter)
         {
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
-            Character character = await CharacterRepository.Find(updateCharacter.id);
+            Character character = await CharacterRepository.GetByIdAsync(updateCharacter.id);
             if (character == null)
             {
                 response.Data = null;
@@ -103,8 +103,8 @@ namespace pr.services.CharacterService
                 response.isSuccessful = false;
                 response.Message = "bad request";
             }
-
-            bool isUpdated = await CharacterRepository.Upsert(character);
+            await CharacterRepository.Upsert(character);
+            bool isUpdated = true;
             if (isUpdated)
             {
                 response.Data = mapper.Map<GetCharacterDto>(character);
@@ -117,6 +117,7 @@ namespace pr.services.CharacterService
                 response.isSuccessful = false;
                 response.Message = "something went wrong!";
             }
+
             await UnitOfWork.Complete();
             return response;
         }
@@ -124,13 +125,14 @@ namespace pr.services.CharacterService
         public async Task<ServiceResponse<Character>> DeleteCharacter(int userid, int id)
         {
             ServiceResponse<Character> serviceResponse = new ServiceResponse<Character>();
-            if ((await CharacterRepository.Find(id)).owner.Id != userid)
+            if ((await CharacterRepository.GetByIdAsync(id)).owner.Id != userid)
             {
                 serviceResponse.Data = null;
                 serviceResponse.isSuccessful = false;
                 serviceResponse.Message = "bad request";
             }
-            bool isDeleted = await CharacterRepository.Delete(id);
+            await CharacterRepository.DeleteAsync(id);
+            bool isDeleted = true;
             if (isDeleted)
             {
                 serviceResponse.Data = null;

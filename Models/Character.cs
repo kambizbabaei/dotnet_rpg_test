@@ -1,14 +1,14 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using cls.majvacore.infra.Domain.Entities;
 using pr.Models;
-using pr.Models.baseClass;
 
 namespace pr.models
 {
-    public class Character : entity
+    public class Character : Entity<int>
     {
-        public Character()
+        public Character() : base()
         {
             Time = DateTime.UtcNow.ToString();
         }

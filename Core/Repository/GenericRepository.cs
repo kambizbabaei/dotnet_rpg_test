@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using cls.majvacore.infra.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using pr.Core.interfaces.IRepository;
@@ -9,7 +10,7 @@ using pr.Models.baseClass;
 
 namespace pr.Core.Repository
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : entity
+    public class GenericRepository<T> : IGenericRepository<T> where T : Entity
     {
         public readonly DataContext Db;
         public readonly ILogger Logger;

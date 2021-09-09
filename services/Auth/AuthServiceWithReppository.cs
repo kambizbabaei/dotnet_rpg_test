@@ -68,7 +68,7 @@ namespace pr.services.Auth
                 createPassword(password, out byte[] hash, out byte[] salt);
                 user.passwordHash = hash;
                 user.passwordSalt = salt;
-                await users.Add(user);
+                await users.InsertAsync(user);
                 await UnitOfWork.Complete();
                 response.Data = user.Id;
                 response.isSuccessful = true;
