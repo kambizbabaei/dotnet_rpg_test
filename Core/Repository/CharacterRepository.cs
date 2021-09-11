@@ -13,15 +13,15 @@ namespace pr.Core.Repository
 {
     public class CharacterRepository : Repository<Character, int>, ICharacterRepository
     {
-        public CharacterRepository(DataContext Db, ILogger logger, DbSet<Character> dbset) : base(Db)
+        public CharacterRepository(DataContext Db/*, ILogger logger, DbSet<Character> dbset*/) : base(Db)
         {
-            Logger = logger;
-            this.dbset = dbset;
+            /*Logger = logger;
+            this.dbset = dbset;*/
         }
 
         public ILogger Logger { get; }
         public DbSet<Character> dbset { get; }
-
+        
         public async Task<IEnumerable<Character>> GetUsersCharacters(int userid)
         {
             try

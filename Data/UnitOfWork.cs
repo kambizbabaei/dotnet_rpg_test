@@ -12,16 +12,27 @@ namespace pr.Data
     {
         public DataContext Context { get; }
         public ILogger Logger { get; }
-        public UserRepository Users { get; }
-        public CharacterRepository Characters { get; }
+
+        ICharacterRepository IUnitOfWork.Characters => throw new NotImplementedException();
+
         public UnitOfWork(ILoggerFactory logger, DataContext context) : base(context)
         {
 
             this.Context = context;
             Logger = logger.CreateLogger("logs");
-            Users = new UserRepository(context, Logger, context.Users);
-            Characters = new CharacterRepository(context, Logger, context.characters);
+            /*Users = new UserRepository(context, Logger, context.Users);
+            Characters = new CharacterRepository(context, Logger, context.characters);*/
         }
+
+        private CharacterRepository _characterRepository;
+
+
+        public ICharacterRepository Characters
+        {
+            get => _characterRepository ??= new CharacterRepository(Context);
+        }
+
+        public UserRepository Users => throw new NotImplementedException();
 
         public async Task Complete()
         {

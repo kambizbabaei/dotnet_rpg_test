@@ -32,6 +32,9 @@ namespace pr.services.CharacterService
             Character character = mapper.Map<Character>(inCharacter);
             character.owner = await UnitOfWork.Users.GetByIdAsync(userid);
             await UnitOfWork.Characters.InsertAsync(character);
+
+            var newChar = await UnitOfWork.Characters.GetByIdAsync(character.Id);
+            
             ServiceResponse<GetCharacterDto> response = new ServiceResponse<GetCharacterDto>();
             response.Data = mapper.Map<GetCharacterDto>(character);
             response.isSuccessful = true;
@@ -68,7 +71,8 @@ namespace pr.services.CharacterService
         public async Task<ServiceResponse<List<GetCharacterDto>>> getAllCharacters(int userid)
         {
             ServiceResponse<List<GetCharacterDto>> response = new ServiceResponse<List<GetCharacterDto>>();
-
+            Character sdfsdf = new Character();
+            var asdaffd = await UnitOfWork.Characters.InsertAsync(sdfsdf);
             // response.Data = ((await Db.characters.ToListAsync()).Select(c => mapper.Map<GetCharacterDto>(c))).ToList();
             response.Data = (((await UnitOfWork.Characters.GetUsersCharacters(userid)).Select(c => mapper.Map<GetCharacterDto>(c))).ToList());
             response.isSuccessful = true;
