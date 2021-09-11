@@ -16,21 +16,21 @@ namespace pr.services.Auth
     {
 
         public IConfiguration Configuration { get; }
-        public UserRepository users { get; }
+
         public IUnitOfWork UnitOfWork { get; }
 
         public AuthServiceWithReppository(IConfiguration configuration, IUnitOfWork unitOfWork)
         {
-            this.UnitOfWork = unitOfWork;
-            this.users = unitOfWork.Users;
             this.Configuration = configuration;
+            UnitOfWork = unitOfWork;
 
         }
 
         public async Task<ServiceResponse<string>> Login(string Username, string password)
         {
             ServiceResponse<string> response = new ServiceResponse<string>();
-            User user = await users.findByUsernameAsync(Username);
+
+            User user = await UnitOfWork.Users.findByUsernameAsync(Username);
             if (user == null)
             {
                 response.isSuccessful = false;
@@ -68,7 +68,7 @@ namespace pr.services.Auth
                 createPassword(password, out byte[] hash, out byte[] salt);
                 user.passwordHash = hash;
                 user.passwordSalt = salt;
-                await users.Add(user);
+                await UnitOfWork.Users.InsertAsync(user);
                 await UnitOfWork.Complete();
                 response.Data = user.Id;
                 response.isSuccessful = true;
@@ -93,7 +93,7 @@ namespace pr.services.Auth
             ServiceResponse<bool> response = new ServiceResponse<bool>();
             try
             {
-                if (await users.findByUsernameAsync(username) != null)
+                if (await UnitOfWork.Users.findByUsernameAsync(username) != null)
                 {
                     response.isSuccessful = false;
                     response.Message = "username already exists";

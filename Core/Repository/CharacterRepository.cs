@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using cls.majvacore.infra.Repository.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using pr.Core.interfaces.IRepository;
@@ -10,11 +11,14 @@ using pr.models;
 
 namespace pr.Core.Repository
 {
-    public class CharacterRepository : GenericRepository<Character>, ICharacterRepository
+    public class CharacterRepository : Repository<Character, int>, ICharacterRepository
     {
-        public CharacterRepository(DataContext Db, ILogger logger, DbSet<Character> dbset) : base(Db, logger, dbset)
+        public CharacterRepository(DataContext Db) : base(Db)
         {
+            dbset = Db.characters;
         }
+
+        private DbSet<Character> dbset { get; }
 
         public async Task<IEnumerable<Character>> GetUsersCharacters(int userid)
         {
@@ -24,16 +28,15 @@ namespace pr.Core.Repository
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "{Repo} GetUsersCharacters error", typeof(UserRepository));
                 return new List<Character>();
             }
         }
 
-        public override async Task<bool> Upsert(Character entity)
+        public async Task<bool> Upsert(Character entity)
         {
             try
             {
-                Character existing = await this.Find(entity.Id);
+                Character existing = await this.GetByIdAsync(entity.Id);
                 if (existing != null)
                 {
                     existing.power = entity.power;
@@ -41,13 +44,14 @@ namespace pr.Core.Repository
                     existing.hitPoints = entity.hitPoints;
                     existing.intelligence = entity.intelligence;
                     existing.name = entity.name;
+                    await this.UpdateAsync(existing);
                     return true;
                 }
-                return await this.Add(entity);
+                await this.InsertAsync(entity);
+                return (true);
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "{Repo} upsert error", typeof(UserRepository));
                 return false;
             }
         }

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
+using cls.majvacore.infra.Domain.Entities;
 using pr.models;
-using pr.Models.baseClass;
 
 namespace pr.Models
 {
-    public class User : entity
+    public class User : Entity<int>
     {
         public bool IsAdmin { get; set; } = false;
         public bool IsSuperUser { get; set; } = false;

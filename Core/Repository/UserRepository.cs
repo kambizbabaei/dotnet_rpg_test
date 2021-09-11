@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using cls.majvacore.infra.Repository.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using pr.Core.interfaces.IRepository;
@@ -11,11 +12,15 @@ using pr.Models;
 
 namespace pr.Core.Repository
 {
-    public class UserRepository : GenericRepository<User>, IUserRepository
+    public class UserRepository : Repository<User, int>, IUserRepository
     {
-        public UserRepository(DataContext Db, ILogger logger, DbSet<User> dbset) : base(Db, logger, dbset)
+        private DbSet<User> dbset;
+
+        public UserRepository(DataContext Db) : base(Db)
         {
+            dbset = Db.Users;
         }
+
 
         public async Task<User> findByUsernameAsync(string username)
         {
@@ -26,26 +31,25 @@ namespace pr.Core.Repository
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "{Repo} findByUsernameAsync error", typeof(UserRepository));
                 return null;
             }
         }
 
-        public override async Task<bool> Upsert(User entity)
+        public async Task<bool> Upsert(User entity)
         {
             try
             {
-                User existing = await this.Find(entity.Id);
+                User existing = await this.GetByIdAsync(entity.Id);
                 if (existing != null)
                 {
                     existing.username = entity.username;
                     return true;
                 }
-                return await this.Add(entity);
+                await this.InsertAsync(entity);
+                return true;
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "{Repo} upsert error", typeof(UserRepository));
                 return false;
             }
         }

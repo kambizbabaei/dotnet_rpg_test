@@ -1,4 +1,5 @@
 {
+
     "sqltools.connections": [
         {
             "previewLimit": 50,
@@ -12,12 +13,13 @@
         }
     
     ],
+
     "files.exclude": {
         ".vs/": true,
         ".vscode/": true,
         "bin/": true,
-        "obj/": true,
-        "pr.code-workspace": true,
-        "Properties/": true
-    }
+        "obj/": true
+    },
+    "files.autoGuessEncoding": true,
+    "files.insertFinalNewline": true
 }

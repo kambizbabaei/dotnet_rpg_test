@@ -1,14 +1,17 @@
 using System.Threading.Tasks;
+using cls.majvacore.infra.Repository.DataAccess.UOW;
+using pr.Core.interfaces.IRepository;
 using pr.Core.Repository;
 
 namespace pr.Core.interfaces.IConfiguration
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IBaseUnitOfWork
     {
-        UserRepository Users { get; }
-        CharacterRepository Characters { get; }
+        IUserRepository Users { get; }
+        ICharacterRepository Characters { get; }
         WeaponRepository Weapons { get; }
         OwnedWeaponRepository UserWeapons { get; }
+
         Task Complete();
     }
 }
