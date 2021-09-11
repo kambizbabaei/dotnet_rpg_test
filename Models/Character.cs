@@ -8,11 +8,11 @@ namespace pr.models
 {
     public class Character : IEntity<int>
     {
+
         public Character()
         {
             Time = DateTime.UtcNow.ToString();
         }
-
 
         public string name { get; set; } = "frodo";
         public int hitPoints { get; set; } = 100;
@@ -21,13 +21,16 @@ namespace pr.models
         public int intelligence { get; set; } = 100;
         public RpgClass characterClass { get; set; } = RpgClass.knight;
         public string Time { get; }
-
         public User owner { get; set; }
         public int Id { get; set; }
-
         public bool IsTransient()
         {
             throw new NotImplementedException();
         }
+
+        [ForeignKey("weapon")]
+        public OwnedWeapon Weapon { get; set; } = null;
+
+
     }
 }

@@ -1,3 +1,9 @@
-- [] add authentication
+- [+] add authentication
 - [] add maximum login number
 - [+] add user existance checking before user creation
+- [] add role based authentication
+        - [] admin(can access all users but other admins)
+        - [] superuser
+            - [] can add admins
+            - [] can remove admins
+            - [] can access all users

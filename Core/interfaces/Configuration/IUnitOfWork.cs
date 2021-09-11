@@ -9,6 +9,9 @@ namespace pr.Core.interfaces.IConfiguration
     {
         IUserRepository Users { get; }
         ICharacterRepository Characters { get; }
+        WeaponRepository Weapons { get; }
+        OwnedWeaponRepository UserWeapons { get; }
+
         Task Complete();
     }
 }

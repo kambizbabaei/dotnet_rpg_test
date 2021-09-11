@@ -10,21 +10,21 @@ namespace pr.Data
 {
     public class UnitOfWork : BaseUnitOfWork, IUnitOfWork
     {
-        public DataContext Context { get; }
-
-
-        public UnitOfWork(DataContext context) : base(context)
+        public DataContext Context { get; }   
+        public WeaponRepository Weapons { get; }
+        public OwnedWeaponRepository UserWeapons { get; }
+        
+        public UnitOfWork(DataContext context)  : base(context)
         {
 
             this.Context = context;
-            /*Users = new UserRepository(context, Logger, context.Users);
-            Characters = new CharacterRepository(context, Logger, context.characters);*/
         }
         #region character repository
         private CharacterRepository _characterRepository;
         public ICharacterRepository Characters
         {
             get => _characterRepository ??= new CharacterRepository(Context);
+
         }
         #endregion
 
@@ -35,6 +35,8 @@ namespace pr.Data
             get => _userRepository ??= new UserRepository(Context);
         }
         #endregion
+        Weapons = new WeaponRepository(context, Logger, context.Weapons);
+        UserWeapons = new OwnedWeaponRepository(context, Logger, context.UserWeapons);
 
         public async Task Complete()
         {

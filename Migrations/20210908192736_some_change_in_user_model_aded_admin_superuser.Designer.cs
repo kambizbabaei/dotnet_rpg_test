@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using pr.Data;
@@ -9,9 +10,10 @@ using pr.Data;
 namespace pr.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210908192736_some_change_in_user_model_aded_admin_superuser")]
+    partial class some_change_in_user_model_aded_admin_superuser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -41,7 +43,7 @@ namespace pr.Migrations
 
                     b.HasIndex("weaponId");
 
-                    b.ToTable("UserWeapons");
+                    b.ToTable("OwnedWeapon");
                 });
 
             modelBuilder.Entity("pr.Models.Token", b =>
@@ -109,7 +111,7 @@ namespace pr.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Weapons");
+                    b.ToTable("Weapon");
                 });
 
             modelBuilder.Entity("pr.models.Character", b =>

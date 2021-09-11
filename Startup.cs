@@ -47,7 +47,7 @@ namespace pr
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
                     ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = true
                 };
             });
             services.AddScoped<IUnitOfWork, UnitOfWork>();

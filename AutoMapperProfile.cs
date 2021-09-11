@@ -1,6 +1,8 @@
 using AutoMapper;
 using pr.dto.Character;
+using pr.dto.Weapon;
 using pr.models;
+using pr.Models;
 
 namespace pr
 {
@@ -10,6 +12,8 @@ namespace pr
         {
             CreateMap<Character, GetCharacterDto>();
             CreateMap<AddCharacterDto, Character>();
+            CreateMap<Weapon, getWeaponDto>();
+            CreateMap<addWeaponDto, Weapon>();
         }
     }
 }

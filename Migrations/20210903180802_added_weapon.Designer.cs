@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using pr.Data;
@@ -9,9 +10,10 @@ using pr.Data;
 namespace pr.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210903180802_added_weapon")]
+    partial class added_weapon
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,29 +21,19 @@ namespace pr.Migrations
                 .HasAnnotation("ProductVersion", "5.0.9")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-            modelBuilder.Entity("pr.Models.OwnedWeapon", b =>
+            modelBuilder.Entity("UserWeapon", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("Health")
+                    b.Property<int>("UserId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("userId")
+                    b.Property<int>("WeaponsId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("weaponId")
-                        .HasColumnType("integer");
+                    b.HasKey("UserId", "WeaponsId");
 
-                    b.HasKey("Id");
+                    b.HasIndex("WeaponsId");
 
-                    b.HasIndex("userId");
-
-                    b.HasIndex("weaponId");
-
-                    b.ToTable("UserWeapons");
+                    b.ToTable("UserWeapon");
                 });
 
             modelBuilder.Entity("pr.Models.Token", b =>
@@ -74,12 +66,6 @@ namespace pr.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<bool>("IsAdmin")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsSuperUser")
-                        .HasColumnType("boolean");
-
                     b.Property<byte[]>("passwordHash")
                         .HasColumnType("bytea");
 
@@ -104,12 +90,9 @@ namespace pr.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<int>("power")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
-                    b.ToTable("Weapons");
+                    b.ToTable("Weapon");
                 });
 
             modelBuilder.Entity("pr.models.Character", b =>
@@ -140,32 +123,31 @@ namespace pr.Migrations
                     b.Property<int>("power")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("weapon")
+                    b.Property<int?>("weaponId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ownerId");
 
-                    b.HasIndex("weapon")
-                        .IsUnique();
+                    b.HasIndex("weaponId");
 
                     b.ToTable("characters");
                 });
 
-            modelBuilder.Entity("pr.Models.OwnedWeapon", b =>
+            modelBuilder.Entity("UserWeapon", b =>
                 {
-                    b.HasOne("pr.Models.User", "user")
-                        .WithMany("Weapons")
-                        .HasForeignKey("userId");
-
-                    b.HasOne("pr.Models.Weapon", "weapon")
+                    b.HasOne("pr.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("weaponId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("user");
-
-                    b.Navigation("weapon");
+                    b.HasOne("pr.Models.Weapon", null)
+                        .WithMany()
+                        .HasForeignKey("WeaponsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("pr.Models.Token", b =>
@@ -181,18 +163,13 @@ namespace pr.Migrations
                         .WithMany("characters")
                         .HasForeignKey("ownerId");
 
-                    b.HasOne("pr.Models.OwnedWeapon", "Weapon")
-                        .WithOne("character")
-                        .HasForeignKey("pr.models.Character", "weapon");
+                    b.HasOne("pr.Models.Weapon", "weapon")
+                        .WithMany("Characters")
+                        .HasForeignKey("weaponId");
 
                     b.Navigation("owner");
 
-                    b.Navigation("Weapon");
-                });
-
-            modelBuilder.Entity("pr.Models.OwnedWeapon", b =>
-                {
-                    b.Navigation("character");
+                    b.Navigation("weapon");
                 });
 
             modelBuilder.Entity("pr.Models.User", b =>
@@ -200,8 +177,11 @@ namespace pr.Migrations
                     b.Navigation("characters");
 
                     b.Navigation("Tokens");
+                });
 
-                    b.Navigation("Weapons");
+            modelBuilder.Entity("pr.Models.Weapon", b =>
+                {
+                    b.Navigation("Characters");
                 });
 #pragma warning restore 612, 618
         }

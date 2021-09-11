@@ -143,6 +143,7 @@ namespace pr.services.Auth
             {
                 new Claim(ClaimTypes.NameIdentifier,user.Id.ToString()),
                 new Claim(ClaimTypes.Name,user.username.ToString()),
+                new Claim(ClaimTypes.Role,user.IsAdmin.ToString())
             };
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(
