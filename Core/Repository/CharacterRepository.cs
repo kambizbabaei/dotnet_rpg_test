@@ -13,15 +13,13 @@ namespace pr.Core.Repository
 {
     public class CharacterRepository : Repository<Character, int>, ICharacterRepository
     {
-        public CharacterRepository(DataContext Db/*, ILogger logger, DbSet<Character> dbset*/) : base(Db)
+        public CharacterRepository(DataContext Db) : base(Db)
         {
-            /*Logger = logger;
-            this.dbset = dbset;*/
+            dbset = Db.characters;
         }
 
-        public ILogger Logger { get; }
-        public DbSet<Character> dbset { get; }
-        
+        private DbSet<Character> dbset { get; }
+
         public async Task<IEnumerable<Character>> GetUsersCharacters(int userid)
         {
             try
@@ -30,7 +28,6 @@ namespace pr.Core.Repository
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "{Repo} GetUsersCharacters error", typeof(UserRepository));
                 return new List<Character>();
             }
         }
@@ -55,7 +52,6 @@ namespace pr.Core.Repository
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "{Repo} upsert error", typeof(UserRepository));
                 return false;
             }
         }

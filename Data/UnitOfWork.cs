@@ -11,28 +11,30 @@ namespace pr.Data
     public class UnitOfWork : BaseUnitOfWork, IUnitOfWork
     {
         public DataContext Context { get; }
-        public ILogger Logger { get; }
 
-        ICharacterRepository IUnitOfWork.Characters => throw new NotImplementedException();
 
-        public UnitOfWork(ILoggerFactory logger, DataContext context) : base(context)
+        public UnitOfWork(DataContext context) : base(context)
         {
 
             this.Context = context;
-            Logger = logger.CreateLogger("logs");
             /*Users = new UserRepository(context, Logger, context.Users);
             Characters = new CharacterRepository(context, Logger, context.characters);*/
         }
-
+        #region character repository
         private CharacterRepository _characterRepository;
-
-
         public ICharacterRepository Characters
         {
             get => _characterRepository ??= new CharacterRepository(Context);
         }
+        #endregion
 
-        public UserRepository Users => throw new NotImplementedException();
+        #region user repository
+        private UserRepository _userRepository;
+        public IUserRepository Users
+        {
+            get => _userRepository ??= new UserRepository(Context);
+        }
+        #endregion
 
         public async Task Complete()
         {

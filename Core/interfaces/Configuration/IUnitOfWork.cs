@@ -7,7 +7,7 @@ namespace pr.Core.interfaces.IConfiguration
 {
     public interface IUnitOfWork : IBaseUnitOfWork
     {
-        UserRepository Users { get; }
+        IUserRepository Users { get; }
         ICharacterRepository Characters { get; }
         Task Complete();
     }

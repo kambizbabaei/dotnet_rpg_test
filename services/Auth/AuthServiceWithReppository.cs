@@ -22,12 +22,14 @@ namespace pr.services.Auth
         public AuthServiceWithReppository(IConfiguration configuration, IUnitOfWork unitOfWork)
         {
             this.Configuration = configuration;
+            UnitOfWork = unitOfWork;
 
         }
 
         public async Task<ServiceResponse<string>> Login(string Username, string password)
         {
             ServiceResponse<string> response = new ServiceResponse<string>();
+
             User user = await UnitOfWork.Users.findByUsernameAsync(Username);
             if (user == null)
             {

@@ -14,15 +14,13 @@ namespace pr.Core.Repository
 {
     public class UserRepository : Repository<User, int>, IUserRepository
     {
-        private readonly DbSet<User> dbset;
+        private DbSet<User> dbset;
 
-        public UserRepository(DataContext Db, ILogger logger, DbSet<User> dbset) : base(Db)
+        public UserRepository(DataContext Db) : base(Db)
         {
-            Logger = logger;
-            this.dbset = dbset;
+            dbset = Db.Users;
         }
 
-        public ILogger Logger { get; }
 
         public async Task<User> findByUsernameAsync(string username)
         {
@@ -33,7 +31,6 @@ namespace pr.Core.Repository
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "{Repo} findByUsernameAsync error", typeof(UserRepository));
                 return null;
             }
         }
@@ -53,7 +50,6 @@ namespace pr.Core.Repository
             }
             catch (Exception ex)
             {
-                Logger.LogError(ex, "{Repo} upsert error", typeof(UserRepository));
                 return false;
             }
         }
