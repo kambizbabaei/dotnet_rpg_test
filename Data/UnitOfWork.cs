@@ -8,7 +8,7 @@ using pr.Core.Repository;
 
 namespace pr.Data
 {
-    public class UnitOfWork : BaseUnitOfWork, IUnitOfWork, IDisposable
+    public class UnitOfWork : BaseUnitOfWork, IUnitOfWork
     {
         public DataContext Context { get; }
         public ILogger Logger { get; }

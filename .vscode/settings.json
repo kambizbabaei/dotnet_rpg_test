@@ -4,5 +4,7 @@
         ".vscode/": true,
         "bin/": true,
         "obj/": true
-    }
+    },
+    "files.autoGuessEncoding": true,
+    "files.insertFinalNewline": true
 }
