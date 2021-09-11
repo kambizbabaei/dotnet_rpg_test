@@ -8,7 +8,7 @@ namespace pr.models
 {
     public class Character : IEntity<int>
     {
-        public Character() : base()
+        public Character()
         {
             Time = DateTime.UtcNow.ToString();
         }
