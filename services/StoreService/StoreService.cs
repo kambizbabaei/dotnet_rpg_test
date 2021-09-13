@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using pr.Core.interfaces.IConfiguration;
 using pr.Core.Repository;
 using pr.dto.Weapon;
@@ -12,24 +13,21 @@ namespace pr.services.StoreService
     public class StoreService : IStoreService
     {
         public readonly IMapper mapper;
+
+        public IUnitOfWork UnitOfWork { get; }
+
         public StoreService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.UnitOfWork = unitOfWork;
-            this.WeaponRepository = UnitOfWork.Weapons;
-            this.UserRepository = UnitOfWork.Users;
-            this.UserWeaponRepository = UnitOfWork.UserWeapons;
             this.mapper = mapper;
         }
-        public IUnitOfWork UnitOfWork { get; }
-        public WeaponRepository WeaponRepository { get; }
-        public OwnedWeaponRepository UserWeaponRepository { get; }
-        public UserRepository UserRepository { get; }
 
         public async Task<ServiceResponse<getWeaponDto>> AddWeapon(addWeaponDto weapon)
         {
             ServiceResponse<getWeaponDto> response = new ServiceResponse<getWeaponDto>();
             Weapon weapon_ = mapper.Map<Weapon>(weapon);
-            if (await WeaponRepository.Add(weapon_))
+            await UnitOfWork.Weapons.InsertAsync(weapon_);
+            if (true)
             {
                 response.Data = mapper.Map<getWeaponDto>(weapon_);
                 response.isSuccessful = true;
@@ -37,17 +35,17 @@ namespace pr.services.StoreService
                 await UnitOfWork.Complete();
                 return response;
             }
-            response.Data = null;
-            response.isSuccessful = false;
-            response.Message = "request failed";
-            return response;
+            // response.Data = null;
+            // response.isSuccessful = false;
+            // response.Message = "request failed";
+            // return response;
 
         }
 
         public async Task<ServiceResponse<List<getWeaponDto>>> AllWeapons()
         {
             ServiceResponse<List<getWeaponDto>> response = new ServiceResponse<List<getWeaponDto>>();
-            List<getWeaponDto> weapons = (await WeaponRepository.All()).Select(w => mapper.Map<getWeaponDto>(w)).ToList();
+            List<getWeaponDto> weapons = await (UnitOfWork.Weapons.GetAll()).Select(w => mapper.Map<getWeaponDto>(w)).ToListAsync();
             response.Data = weapons;
             return response;
 
@@ -57,10 +55,10 @@ namespace pr.services.StoreService
         {
             // todo : add userWeaponDto
             OwnedWeapon weapon = new OwnedWeapon();
-            weapon.user = await UserRepository.Find(userid);
-            weapon.weapon = await WeaponRepository.Find(weaponId);
+            weapon.user = await UnitOfWork.Users.GetByIdAsync(userid);
+            weapon.weapon = await UnitOfWork.Weapons.GetByIdAsync(weaponId);
             weapon.Health = 100;
-            await UserWeaponRepository.Add(weapon);
+            await UnitOfWork.UserWeapons.InsertAsync(weapon);
             ServiceResponse<OwnedWeapon> response = new ServiceResponse<OwnedWeapon>();
             response.Data = weapon;
             response.isSuccessful = true;
@@ -72,7 +70,8 @@ namespace pr.services.StoreService
         public async Task<ServiceResponse<bool>> RemoveWeapon(int weaponId)
         {
             ServiceResponse<bool> response = new ServiceResponse<bool>();
-            if (await WeaponRepository.Delete(weaponId))
+            await UnitOfWork.Weapons.DeleteAsync(weaponId);
+            if (true)
             {
                 response.Data = true;
                 response.isSuccessful = true;
@@ -80,10 +79,10 @@ namespace pr.services.StoreService
                 await UnitOfWork.Complete();
                 return response;
             }
-            response.Data = false;
-            response.isSuccessful = false;
-            response.Message = "request failed";
-            return response;
+            // response.Data = false;
+            // response.isSuccessful = false;
+            // response.Message = "request failed";
+            // return response;
 
         }
     }

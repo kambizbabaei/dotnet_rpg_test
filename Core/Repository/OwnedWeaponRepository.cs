@@ -1,3 +1,4 @@
+using cls.majvacore.infra.Repository.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using pr.Core.interfaces.Repository;
@@ -6,9 +7,9 @@ using pr.Models;
 
 namespace pr.Core.Repository
 {
-    public class OwnedWeaponRepository : GenericRepository<OwnedWeapon>, IOwnedWeaponRepository
+    public class OwnedWeaponRepository : Repository<OwnedWeapon, int>, IOwnedWeaponRepository
     {
-        public OwnedWeaponRepository(DataContext Db, ILogger logger, DbSet<OwnedWeapon> dbset) : base(Db, logger, dbset)
+        public OwnedWeaponRepository(DataContext Db) : base(Db)
         {
         }
     }
