@@ -12,6 +12,7 @@ using pr.Core.interfaces.IConfiguration;
 using pr.Data;
 using pr.services.Auth;
 using pr.services.CharacterService;
+using pr.services.StoreService;
 
 namespace pr
 {
@@ -37,6 +38,7 @@ namespace pr
             services.AddDbContext<DataContext>(opt => opt.UseNpgsql(Configuration.GetConnectionString("postgres")));
             services.AddScoped<ICharacterService, CharacterServiceWithRepository>();
             services.AddScoped<IAuthService, AuthServiceWithReppository>();
+            services.AddScoped<IStoreService, StoreService>();
             services.AddAutoMapper(typeof(Startup));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(opt =>

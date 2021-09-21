@@ -13,7 +13,6 @@ namespace pr.services.StoreService
     public class StoreService : IStoreService
     {
         public readonly IMapper mapper;
-
         public IUnitOfWork UnitOfWork { get; }
 
         public StoreService(IUnitOfWork unitOfWork, IMapper mapper)
@@ -21,7 +20,6 @@ namespace pr.services.StoreService
             this.UnitOfWork = unitOfWork;
             this.mapper = mapper;
         }
-
         public async Task<ServiceResponse<getWeaponDto>> AddWeapon(addWeaponDto weapon)
         {
             ServiceResponse<getWeaponDto> response = new ServiceResponse<getWeaponDto>();
@@ -84,6 +82,11 @@ namespace pr.services.StoreService
             // response.Message = "request failed";
             // return response;
 
+        }
+
+        public Task<ServiceResponse<getWeaponDto>> getWeapon(int waeponId)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

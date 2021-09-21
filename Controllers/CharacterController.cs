@@ -27,6 +27,7 @@ namespace pr.Controllers
         [HttpGet("GetFirst")]
         public async Task<IActionResult> GetFirst()
         {
+
             int UserId = int.Parse((User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)).Value);
             return Ok(await this.CharacterService.getFirst(UserId));
         }

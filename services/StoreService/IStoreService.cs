@@ -11,6 +11,6 @@ namespace pr.services.StoreService
         Task<ServiceResponse<bool>> RemoveWeapon(int weaponId);
         Task<ServiceResponse<OwnedWeapon>> PurchaseWeapon(int weaponId, int userid);
         Task<ServiceResponse<List<getWeaponDto>>> AllWeapons();
-
+        Task<ServiceResponse<getWeaponDto>> getWeapon(int waeponId);
     }
 }
